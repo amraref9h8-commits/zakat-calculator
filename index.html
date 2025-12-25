@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>حاسبة الزكاة</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont;
+      background:#0f172a;
+      color:#fff;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:100vh;
+    }
+    .app{
+      width:100%;
+      max-width:420px;
+      background:#020617;
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 10px 40px rgba(0,0,0,.6);
+    }
+    h1{
+      text-align:center;
+      margin:0 0 10px;
+    }
+    select,input,button{
+      width:100%;
+      padding:12px;
+      margin:8px 0;
+      border-radius:10px;
+      border:none;
+      font-size:16px;
+    }
+    input,select{
+      background:#020617;
+      color:#fff;
+      border:1px solid #334155;
+    }
+    button{
+      background:#22c55e;
+      color:#000;
+      font-weight:bold;
+      cursor:pointer;
+    }
+    .result{
+      margin-top:15px;
+      padding:12px;
+      background:#020617;
+      border-radius:10px;
+      border:1px solid #334155;
+    }
+    .footer{
+      margin-top:15px;
+      text-align:center;
+      font-size:13px;
+      opacity:.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <h1>🕌 حاسبة الزكاة</h1>
+
+    <select id="madhab">
+      <option value="jumhur">الجمهور (النصاب بالذهب)</option>
+      <option value="hanafi">الحنفي (النصاب بالفضة)</option>
+    </select>
+
+    <input id="money" type="number" placeholder="المبلغ بالدولار" />
+
+    <button onclick="calc()">احسب الزكاة</button>
+
+    <div class="result" id="result">
+      أدخل المبلغ ثم اضغط احسب
+    </div>
+
+    <div class="footer">
+      الزكاة 2.5% • حساب تقريبي
+    </div>
+  </div>
+
+  <script>
+    function calc(){
+      const money = Number(document.getElementById('money').value);
+      const madhab = document.getElementById('madhab').value;
+
+      const goldNisab = 85 * 65;   // تقدير
+      const silverNisab = 595 * 0.8;
+
+      const nisab = madhab === 'hanafi' ? silverNisab : goldNisab;
+
+      if(!money || money <= 0){
+        result.innerText = "الرجاء إدخال مبلغ صحيح";
+        return;
+      }
+
+      if(money < nisab){
+        result.innerText = "لم يبلغ المال النصاب، لا زكاة";
+      }else{
+        const zakat = money * 0.025;
+        result.innerText = `تجب الزكاة: ${zakat.toFixed(2)} دولار`;
+      }
+    }
+  </script>
+</body>
+</html>
