@@ -2,19 +2,23 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>حاسبة الزكاة</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#22c55e" />
 
   <style>
     body{
       margin:0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont;
-      background:#0f172a;
-      color:#fff;
-      display:flex;
-      justify-content:center;
-      align-items:center;
       min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#0f172a;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont;
+      color:#fff;
     }
     .app{
       width:100%;
@@ -22,11 +26,11 @@
       background:#020617;
       border-radius:16px;
       padding:20px;
-      box-shadow:0 10px 40px rgba(0,0,0,.6);
+      box-shadow:0 10px 40px rgba(0,0,0,.5);
     }
     h1{
       text-align:center;
-      margin:0 0 10px;
+      margin-bottom:15px;
     }
     select,input,button{
       width:100%;
@@ -53,11 +57,12 @@
       background:#020617;
       border-radius:10px;
       border:1px solid #334155;
+      text-align:center;
     }
     .footer{
-      margin-top:15px;
-      text-align:center;
+      margin-top:12px;
       font-size:13px;
+      text-align:center;
       opacity:.7;
     }
   </style>
@@ -81,31 +86,38 @@
     </div>
 
     <div class="footer">
-      الزكاة 2.5% • حساب تقريبي
+      الزكاة 2.5% – حساب تقريبي
     </div>
   </div>
 
   <script>
     function calc(){
-      const money = Number(document.getElementById('money').value);
-      const madhab = document.getElementById('madhab').value;
+      const money = Number(document.getElementById("money").value);
+      const madhab = document.getElementById("madhab").value;
+      const result = document.getElementById("result");
 
-      const goldNisab = 85 * 65;   // تقدير
-      const silverNisab = 595 * 0.8;
+      // أسعار تقريبية (تُعدّل لاحقًا تلقائي)
+      const goldNisab = 85 * 75;     // ذهب
+      const silverNisab = 595 * 0.8; // فضة
 
-      const nisab = madhab === 'hanafi' ? silverNisab : goldNisab;
+      const nisab = madhab === "hanafi" ? silverNisab : goldNisab;
 
       if(!money || money <= 0){
-        result.innerText = "الرجاء إدخال مبلغ صحيح";
+        result.innerText = "❌ الرجاء إدخال مبلغ صحيح";
         return;
       }
 
       if(money < nisab){
-        result.innerText = "لم يبلغ المال النصاب، لا زكاة";
+        result.innerText = "❌ لم يبلغ المال النصاب";
       }else{
         const zakat = money * 0.025;
-        result.innerText = `تجب الزكاة: ${zakat.toFixed(2)} دولار`;
+        result.innerText = "✅ الزكاة الواجبة: " + zakat.toFixed(2) + " دولار";
       }
+    }
+
+    // تسجيل Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
     }
   </script>
 </body>
